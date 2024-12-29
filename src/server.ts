@@ -1,11 +1,11 @@
-import express, { Express, NextFunction, Request, Response } from 'express';
-import cookieParser from 'cookie-parser';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import createError from 'http-errors';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import mongoose from 'mongoose';
 import morgan from 'morgan';
 import routes from './routes';
+import createError from 'http-errors';
+import mongoose from 'mongoose';
 import type { TServerConfig } from './types';
 
 export class InitServer {
@@ -24,12 +24,22 @@ export class InitServer {
         this.server.set('db_url', config.db_url);
         this.server.set('log_level', config.log_level);
 
-        // Setup middlewares
+        // Setup CORS to allow credentials and the specific frontend
         this.server.use(cors({
-            origin: 'https://invoice-maker-frontend.vercel.app',
+            origin: 'https://invoice-maker-frontend.vercel.app',  // Ensure correct frontend URL
             credentials: true,
-          }));
-          
+        }));
+
+        // Explicitly handle OPTIONS preflight requests
+        this.server.options('*', (req: Request, res: Response) => {
+            res.setHeader('Access-Control-Allow-Origin', 'https://invoice-maker-frontend.vercel.app');
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+            res.sendStatus(200);
+        });
+
+        // Apply other middlewares
         this.server.use(helmet());
         this.server.use(morgan('tiny'));
         this.server.use(cookieParser());
@@ -39,7 +49,7 @@ export class InitServer {
         // Setup routes
         this.server.use('/', routes);
 
-        // Create 404 error if requested route is not defined
+        // Catch-all for 404 errors
         this.server.use((req: Request, res: Response, next: NextFunction) => {
             next(createError(404));
         });
