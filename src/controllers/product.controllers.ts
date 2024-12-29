@@ -16,11 +16,13 @@ export const addProduct = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Failed to add product', error });
     }
 };
-
-// Controller to find all products by user_id
 export const getProductsByUserId = async (req: Request, res: Response) => {
     try {
-        const { user_id } = req.params;
+        const { user_id } = req.body;  // Getting user_id from request body
+
+        if (!user_id) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
 
         // Find all products for the given user_id
         const products = await Product.find({ user_id });

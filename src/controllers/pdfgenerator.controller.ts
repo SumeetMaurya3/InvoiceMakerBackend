@@ -8,7 +8,7 @@ import { User } from "../models/user.model";
 export const generateUserProductsPdf = async (req: Request, res: Response) => {
   try {
     // Extract userId from request parameters (or body/query)
-    const { userId } = req.params;
+    const { userId } = req.body;
 
     if (!userId) {
       return res

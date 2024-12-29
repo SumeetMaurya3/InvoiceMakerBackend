@@ -8,4 +8,4 @@ user.post('/login', controller.login);
 user.post('/refresh', controller.refresh);
 user.post('/validate', controller.validate);
 user.post('/logout', controller.logout);
-user.get('/profile',  controller.getUserProfile);
+user.post('/profile',  controller.getUserProfile);

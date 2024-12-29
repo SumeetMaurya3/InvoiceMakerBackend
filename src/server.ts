@@ -19,25 +19,18 @@ export class InitServer {
 
     setup(config: TServerConfig) {
         // Setup server configs
+        this.server.use(cors({
+            origin: 'https://invoice-maker-frontend.vercel.app',
+            credentials: true,
+            methods: ['GET', 'POST', 'OPTIONS'],  // Allow OPTIONS preflight requests
+            allowedHeaders: ['Content-Type', 'Authorization'], // Adjust for custom headers if needed
+        }));
+        
+
         this.server.set('host', config.host);
         this.server.set('port', config.port);
         this.server.set('db_url', config.db_url);
         this.server.set('log_level', config.log_level);
-
-        // Setup CORS to allow credentials and the specific frontend
-        this.server.use(cors({
-            origin: 'https://invoice-maker-frontend.vercel.app',  // Ensure correct frontend URL
-            credentials: true,
-        }));
-
-        // Explicitly handle OPTIONS preflight requests
-        this.server.options('*', (req: Request, res: Response) => {
-            res.setHeader('Access-Control-Allow-Origin', 'https://invoice-maker-frontend.vercel.app');
-            res.setHeader('Access-Control-Allow-Credentials', 'true');
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-            res.sendStatus(200);
-        });
 
         // Apply other middlewares
         this.server.use(helmet());

@@ -61,7 +61,7 @@ export const login = async (req: Request, res: Response) => {
         }
 
         const tokens = await generateTokens(user);  // This should generate both access and refresh tokens
-
+        console.log(tokens)
         res.status(200).json({
             error: false,
             access_token: tokens?.access_token,
@@ -109,27 +109,27 @@ export const refresh = async (req: Request, res: Response) => {
     return res.status(500).json({ error: true, message: "Internal server error" });
   }
 };
+export const validate = async (req: Request, res: Response) => {
+    const token = req.body.token; // Extract token from the request body
 
+    if (!token) {
+        return res.status(400).json({ error: true, message: 'Access token is required' });
+    }
 
-  export const validate = async (req: Request, res: Response) => {
-      // Extract token from cookies (instead of body)
-      const token = req.cookies.access_token; // Assumes cookie-parser is used
-  
-      if (!token) {
-          return res.status(400).json({ error: true, message: 'Access token is required' });
-      }
-  
-      const is_valid_token = getTokenInfo(token)?.is_valid_token;
-  
-      if (is_valid_token) {
-          return res.status(200).json({
-              error: false,
-              message: 'Token is valid',
-          });
-      } else {
-          return refresh(req, res); // Handle token refresh if invalid
-      }
-  };
+    // Pass the token to `getTokenInfo`
+    const tokenInfo = getTokenInfo({ token, token_type: 'access' });
+
+    if (tokenInfo?.is_valid_token) {
+        return res.status(200).json({
+            error: false,
+            message: 'Token is valid',
+            user: tokenInfo.user, // Send the user object in the response
+        });
+    } else {
+        return refresh(req, res); // Handle token refresh if invalid
+    }
+};
+
 
 export const logout =  async (req: Request, res: Response) => {
     const { refresh_token } = req.body;
@@ -144,10 +144,9 @@ export const logout =  async (req: Request, res: Response) => {
       res.status(500).json({ error: true, message: 'Internal Server Error' });
     }
   };
-  
 export const getUserProfile = (req: Request, res: Response) => {
     // Extract token from cookies
-    const token = req.cookies.access_token;
+    const token = req.body.token;
 
     if (!token) {
         return res.status(400).json({ error: true, message: 'Access token is required' });
