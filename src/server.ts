@@ -26,9 +26,10 @@ export class InitServer {
 
         // Setup middlewares
         this.server.use(cors({
-            origin: 'http://localhost:5173', // Replace with your frontend's URL
-            credentials: true, // Allow credentials (cookies) to be sent
-          }));;
+            origin: 'https://invoice-maker-frontend.vercel.app',
+            credentials: true,
+          }));
+          
         this.server.use(helmet());
         this.server.use(morgan('tiny'));
         this.server.use(cookieParser());
