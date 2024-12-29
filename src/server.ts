@@ -26,7 +26,7 @@ export class InitServer {
 
         // Setup CORS to allow credentials and the specific frontend
         this.server.use(cors({
-            origin: '*',  // Ensure correct frontend URL
+            origin: 'https://invoice-maker-frontend.vercel.app',  // Ensure correct frontend URL
             credentials: true,
         }));
 

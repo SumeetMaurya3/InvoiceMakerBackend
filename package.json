@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "rimraf dist && env && npx tsc",
     "start": "npm run build && node dist/index.js",
