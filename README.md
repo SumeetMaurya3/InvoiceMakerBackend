@@ -2,6 +2,9 @@
 
 This is the backend for invoice maker. Follow the usage instructions to setup your own.
 
+# Expected Result
+![alt text](image.png)
+
 ## Requirements
 
 Make sure you have the following software installed on your system:
