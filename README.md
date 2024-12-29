@@ -17,13 +17,13 @@ Follow these steps to get started with this starter kit:
 1. Clone the project to your local machine:
 
    ```shell
-   git clone git@github.com:hamidyfine/node-express-mongo-ts-starter-kit.git
+   git clone git@github.com:SumeetMaurya3/InvoiceMakerBackend.git
    ```
 
 2. Navigate to the project directory:
 
    ```shell
-   cd node-express-mongo-ts-starter-kit
+   cd InvoiceMakerBackend
    ```
 
 3. Install the required dependencies using either Yarn or npm:
